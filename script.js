@@ -1,4 +1,4 @@
-// Ganti dengan API key OpenWeatherMap milikmu (https://openweathermap.org/api)
+
 const API_KEY = "2ca60da8cc79c7624010c99db7750bbf";
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 const HISTORY_KEY = "weather-history";
@@ -9,10 +9,9 @@ const statusEl = document.getElementById("status");
 const resultEl = document.getElementById("result");
 const historyEl = document.getElementById("history");
 
-let unit = "C";       // "C" atau "F"
-let lastData = null;  // { current, forecast } untuk render ulang saat toggle
+let unit = "C";       
+let lastData = null;  
 
-// ---------- Util ----------
 const toUnit = (c) => Math.round(unit === "C" ? c : (c * 9) / 5 + 32);
 const iconUrl = (code) => `https://openweathermap.org/img/wn/${code}@2x.png`;
 const dayName = (dt) =>
@@ -27,7 +26,6 @@ const showError = (msg) => {
   resultEl.hidden = true;
 };
 
-// ---------- Fetch ----------
 const getJson = async (path, city) => {
   const url = `${BASE_URL}/${path}?q=${encodeURIComponent(city)}&units=metric&lang=id&appid=${API_KEY}`;
   let res;
@@ -50,13 +48,11 @@ const fetchWeather = async (city) => {
   return { current, forecast };
 };
 
-// ---------- Render ----------
 const render = () => {
   if (!lastData) return;
   const { current, forecast } = lastData;
   const w = current.weather[0];
 
-  // Ambil satu data per hari (jam 12:00) lalu ubah ke HTML dengan map
   const days = forecast.list
     .filter((item) => item.dt_txt.includes("12:00:00"))
     .map((item) => `
@@ -90,7 +86,6 @@ const render = () => {
   resultEl.hidden = false;
 };
 
-// ---------- Riwayat (LocalStorage) ----------
 const loadHistory = () => {
   try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
   catch { return []; }
@@ -106,7 +101,6 @@ const renderHistory = () => {
     .join("");
 };
 
-// ---------- Alur utama ----------
 const search = async (city) => {
   showLoading();
   try {
